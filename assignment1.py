@@ -65,27 +65,28 @@ def find_longest_title(data):
 def show_movie(raw_data, longest_title):
     watch_count = 0
     # Looping over raw data
-    for movie in raw_data:
+    for index, movie in enumerate(raw_data):
         # Split data by ','
         splited_data = movie.split(',')
         mark = '*' if 'u' in splited_data[3] else ''
         title = splited_data[0]
         year = splited_data[1]
         genre = splited_data[2]
-        print('{0:<2} {1:<{2}} - {3:<4} ({4})'.format(mark, title, longest_title ,year, genre))
+        print('{0}. {1:<2} {2:<{3}} - {4:<4} ({5})'.format(index ,mark, title, longest_title ,year, genre))
 
         # If mark == '' then increment watch_count
         if not mark:
             watch_count += 1
     
     unwatch_count = len(raw_data) - watch_count
-    print('{} movies watched, {} movies still to watch'.format(watch_count, unwatch_count))
+    print('\n{} movies watched, {} movies still to watch'.format(watch_count, unwatch_count))
         
 
 # =========
 # ADD MOVIE
 # =========
 def add_movies(data):
+    print(data[-1])
     # User input
     def functionA():
         return
@@ -93,12 +94,13 @@ def add_movies(data):
     year = year_handler()
     genre = text_handler('Category: ')
 
+    # Add \n to the final movie from movie list
+    data[-1] = data[-1] + '\n'
     
     # Save to data
-    data_to_save = '\n{},{},{},u'.format(title, year, genre)
+    data_to_save = '{},{},{},u'.format(title, year, genre)
     data.append(data_to_save)
-    # join_data = ''.join(data)
-    # print(join_data)
+    print('{} ({} from {}) added to movie list'.format(title, genre, year))
 
 # Text handler
 def text_handler(input_name):
@@ -115,14 +117,12 @@ def year_handler():
         try:
             year_input = int(input('Year: '))
             if year_input <= 0:
-                raise Exception('YearError')
-            break
+                raise Exception('Your year input must be greater than 0')
+            return year_input
         except ValueError:
             print('Invalid input, enter a valid number')
         except Exception:
-            print('Your number must be more than 0')
-    
-    return year_input
+            print('Your number must be greater than 0')
 
             
     
@@ -132,13 +132,54 @@ def year_handler():
 # WATCH MOVIE
 # ===========
 def watch_movie(data):
-    return
+    movie_number = movie_number_handler(data)
 
-# ==========
-# SAVE MOVIE
-# ==========
-def save_data(data):
-    return
+# Movie number handler
+def movie_number_handler(data):
+    while True:
+        try:
+            # Check if the user have watch all of them
+            watched_all = check_watched_all(data)
+            if watched_all:
+                print('You have watch all the movies')
+                return
+            
+            movie_number = int(input('>>> '))
+            if movie_number not in range(0, len(data)):
+                raise KeyError('Enter the number of movie to mark as watched\n >>> ')
+
+            splited_data = data[movie_number].split(',')
+
+
+            if 'u' in splited_data[3]:
+                # Replace u by w
+                splited_data[3] = splited_data[3].replace('u', 'w')
+                # Join splited data to data
+                data[movie_number] = ','.join(splited_data)
+                print('{} from {} watched'.format(splited_data[0], splited_data[1]))
+            else:
+                raise Exception('Already watched')
+
+            return
+        except ValueError:
+            print('Invalid input, enter a valid number')
+        except KeyError:
+            print('Your number of movie does not exist, try again')
+        except Exception:
+            print('You have already watched {}'.format(splited_data[0]))
+            
+# Check watch all
+def check_watched_all(data):
+    watched_all = True
+    for movie in data:
+        splited_data = movie.split(',')
+        if 'w' in splited_data[3]:
+            watched_all = True and watched_all
+        else:
+            watched_all = False
+    
+    return watched_all
+
 
 # ========
 # RUN MAIN
