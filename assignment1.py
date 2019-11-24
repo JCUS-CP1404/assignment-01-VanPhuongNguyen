@@ -42,6 +42,8 @@ def main():
     # Close file
     in_file.close()
 
+
+
 # ===============
 # SHOW MOVIE LIST
 # ===============
@@ -51,7 +53,7 @@ def list_movies(data):
     # Print out list of movie based on raw data
     show_movie(data, longest_title)
 
-    
+
 # Find longest title
 def find_longest_title(data):
     longest_title = 0
@@ -82,14 +84,12 @@ def show_movie(raw_data, longest_title):
     print('\n{} movies watched, {} movies still to watch'.format(watch_count, unwatch_count))
         
 
+
 # =========
 # ADD MOVIE
 # =========
 def add_movies(data):
-    print(data[-1])
     # User input
-    def functionA():
-        return
     title = text_handler('Title: ')
     year = year_handler()
     genre = text_handler('Category: ')
@@ -125,7 +125,6 @@ def year_handler():
             print('Your number must be greater than 0')
 
             
-    
 
 
 # ===========
