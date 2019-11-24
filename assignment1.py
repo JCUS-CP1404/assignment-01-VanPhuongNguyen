@@ -21,7 +21,7 @@ def main():
         print('Q - Quit')
         
         # Input choice
-        choice = input('>>>').upper()
+        choice = input('>>> ').upper()
         if choice == 'L':
             list_movies(data)
         elif choice == 'A':
@@ -46,7 +46,41 @@ def load_data(in_file):
 
 # Show list movies
 def list_movies(data):
-    return
+    # Find the max length of titles
+    longest_title = find_longest_title(data)
+    # Print out list of movie based on raw data
+    show_movie(data, longest_title)
+        
+# Find longest title
+def find_longest_title(data):
+    longest_title = 0
+    for movie in data:
+        splited_data = movie.split(',')
+        longest_title = len(splited_data[0]) if longest_title < len(splited_data[0]) else longest_title
+    
+    return longest_title
+
+# Show movie based on raw data
+def show_movie(raw_data, longest_title):
+    watch_count = 0
+    # Looping over raw data
+    for movie in raw_data:
+        # Split data by ','
+        splited_data = movie.split(',')
+        title_max_length = 0
+        mark = '*' if 'u' in splited_data[3] else ''
+        title = splited_data[0]
+        title_max_length = len(title) if len(title) > title_max_length else title_max_length
+        year = splited_data[1]
+        genre = splited_data[2]
+        print('{0:<2} {1:<{2}} - {3:<4} ({4})'.format(mark, title, longest_title ,year, genre))
+
+        # If mark == '' then increment watch_count
+        if not mark:
+            watch_count += 1
+    
+    unwatch_count = len(raw_data) - watch_count
+    print('{} movies watched, {} movies still to watch'.format(watch_count, unwatch_count))
 
 # Add new movie
 def add_movies(data):
