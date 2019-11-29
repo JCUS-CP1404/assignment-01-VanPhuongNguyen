@@ -67,7 +67,7 @@ def find_longest_title(data):
 def show_movie(raw_data, longest_title):
     watch_count = 0
     # Looping over raw data
-    for index, movie in enumerate(raw_data):
+    for index, movie in enumerate(raw_data, start = 1):
         # Split data by ','
         splited_data = movie.split(',')
         mark = '*' if 'u' in splited_data[3] else ''
@@ -135,6 +135,7 @@ def watch_movie(data):
 
 # Movie number handler
 def movie_number_handler(data):
+    print('Enter the number of a movie to mark as watched')
     while True:
         try:
             # Check if the user have watch all of them
@@ -145,7 +146,7 @@ def movie_number_handler(data):
             
             movie_number = int(input('>>> '))
             if movie_number not in range(0, len(data)):
-                raise KeyError('Enter the number of movie to mark as watched\n >>> ')
+                raise KeyError('Cannot find movie number!')
 
             splited_data = data[movie_number].split(',')
 
@@ -183,5 +184,4 @@ def check_watched_all(data):
 # ========
 # RUN MAIN
 # ========
-if __name__ == '__main__':
-    main()
+main()
