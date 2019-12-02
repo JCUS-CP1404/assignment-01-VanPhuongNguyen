@@ -131,10 +131,6 @@ def year_handler():
 # WATCH MOVIE
 # ===========
 def watch_movie(data):
-    movie_number = movie_number_handler(data)
-
-# Movie number handler
-def movie_number_handler(data):
     print('Enter the number of a movie to mark as watched')
     while True:
         try:
@@ -145,29 +141,31 @@ def movie_number_handler(data):
                 return
             
             movie_number = int(input('>>> '))
-            if movie_number not in range(0, len(data)):
+            if movie_number not in range(1 , len(data) + 1):
                 raise KeyError('Cannot find movie number!')
 
-            splited_data = data[movie_number].split(',')
+            splited_data = data[movie_number - 1].split(',')
 
 
             if 'u' in splited_data[3]:
                 # Replace u by w
                 splited_data[3] = splited_data[3].replace('u', 'w')
                 # Join splited data to data
-                data[movie_number] = ','.join(splited_data)
+                data[movie_number - 1] = ','.join(splited_data)
                 print('{} from {} watched'.format(splited_data[0], splited_data[1]))
             else:
                 raise Exception('Already watched')
 
-            return
+            break
         except ValueError:
             print('Invalid input, enter a valid number')
         except KeyError:
             print('Your number of movie does not exist, try again')
         except Exception:
             print('You have already watched {}'.format(splited_data[0]))
-            
+            break
+
+
 # Check watch all
 def check_watched_all(data):
     watched_all = True
